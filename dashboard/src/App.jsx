@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Routes, Route, NavLink, Navigate, useLocation } from 'react-router-dom'
+import { Routes, Route, NavLink, Navigate } from 'react-router-dom'
 import LiveStatus from './pages/LiveStatus'
 import SignalDetail from './pages/SignalDetail'
 import Briefs from './pages/Briefs'
@@ -117,30 +117,40 @@ function DashboardLayout({ children }) {
   )
 }
 
-function ProtectedDashboard() {
-  return (
-    <PasswordGate>
-      <DashboardLayout>
-        <Routes>
-          <Route path="/" element={<LiveStatus />} />
-          <Route path="/signals" element={<SignalDetail />} />
-          <Route path="/briefs" element={<Briefs />} />
-          <Route path="/methodology" element={<Methodology />} />
-          <Route path="/markets" element={<Markets />} />
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
-      </DashboardLayout>
-    </PasswordGate>
-  )
-}
-
 export default function App() {
-  const { pathname } = useLocation()
+  return (
+    <Routes>
+      {/* Public routes — no password, no layout */}
+      <Route path="/public" element={<PublicScore />} />
+      <Route path="/terms" element={<Terms />} />
 
-  // Public routes — no password gate, no dashboard layout
-  if (pathname === '/public') return <PublicScore />
-  if (pathname === '/terms') return <Terms />
-
-  // Everything else — password protected dashboard
-  return <ProtectedDashboard />
+      {/* All other routes — password gated */}
+      <Route path="/" element={
+        <PasswordGate>
+          <DashboardLayout><LiveStatus /></DashboardLayout>
+        </PasswordGate>
+      } />
+      <Route path="/signals" element={
+        <PasswordGate>
+          <DashboardLayout><SignalDetail /></DashboardLayout>
+        </PasswordGate>
+      } />
+      <Route path="/briefs" element={
+        <PasswordGate>
+          <DashboardLayout><Briefs /></DashboardLayout>
+        </PasswordGate>
+      } />
+      <Route path="/methodology" element={
+        <PasswordGate>
+          <DashboardLayout><Methodology /></DashboardLayout>
+        </PasswordGate>
+      } />
+      <Route path="/markets" element={
+        <PasswordGate>
+          <DashboardLayout><Markets /></DashboardLayout>
+        </PasswordGate>
+      } />
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
+  )
 }
