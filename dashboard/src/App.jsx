@@ -118,30 +118,29 @@ function DashboardLayout({ children }) {
 }
 
 export default function App() {
-  return (
-    <Routes>
-      {/* Public routes — no password */}
-      <Route path="/public" element={<PublicScore />} />
-      <Route path="/terms" element={<Terms />} />
+  const location = window.location.pathname
 
-      {/* Protected dashboard routes */}
-      <Route
-        path="/*"
-        element={
-          <PasswordGate>
-            <DashboardLayout>
-              <Routes>
-                <Route path="/" element={<LiveStatus />} />
-                <Route path="/signals" element={<SignalDetail />} />
-                <Route path="/briefs" element={<Briefs />} />
-                <Route path="/methodology" element={<Methodology />} />
-                <Route path="/markets" element={<Markets />} />
-                <Route path="*" element={<Navigate to="/" replace />} />
-              </Routes>
-            </DashboardLayout>
-          </PasswordGate>
-        }
-      />
-    </Routes>
+  // Public routes — bypass password gate entirely
+  if (location === '/public') {
+    return <PublicScore />
+  }
+  if (location === '/terms') {
+    return <Terms />
+  }
+
+  // All other routes — password protected
+  return (
+    <PasswordGate>
+      <DashboardLayout>
+        <Routes>
+          <Route path="/" element={<LiveStatus />} />
+          <Route path="/signals" element={<SignalDetail />} />
+          <Route path="/briefs" element={<Briefs />} />
+          <Route path="/methodology" element={<Methodology />} />
+          <Route path="/markets" element={<Markets />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </DashboardLayout>
+    </PasswordGate>
   )
 }
