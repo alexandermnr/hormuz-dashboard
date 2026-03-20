@@ -5,6 +5,8 @@ import SignalDetail from './pages/SignalDetail'
 import Briefs from './pages/Briefs'
 import Methodology from './pages/Methodology'
 import Markets from './pages/Markets'
+import Pricing from './pages/Pricing'
+import Roadmap from './pages/Roadmap'
 import PublicScore from './pages/PublicScore'
 import Terms from './pages/Terms'
 
@@ -16,6 +18,8 @@ const NAV_ITEMS = [
   { path: '/briefs', label: 'Briefs', icon: '03' },
   { path: '/methodology', label: 'Methodology', icon: '04' },
   { path: '/markets', label: 'Markets', icon: '05' },
+  { path: '/pricing', label: 'Pricing', icon: '06' },
+  { path: '/roadmap', label: 'Roadmap', icon: '07' },
 ]
 
 function PasswordGate({ children }) {
@@ -148,6 +152,16 @@ export default function App() {
       <Route path="/markets" element={
         <PasswordGate>
           <DashboardLayout><Markets /></DashboardLayout>
+        </PasswordGate>
+      } />
+      <Route path="/pricing" element={
+        <PasswordGate>
+          <DashboardLayout><Pricing /></DashboardLayout>
+        </PasswordGate>
+      } />
+      <Route path="/roadmap" element={
+        <PasswordGate>
+          <DashboardLayout><Roadmap /></DashboardLayout>
         </PasswordGate>
       } />
       <Route path="*" element={<Navigate to="/" replace />} />
