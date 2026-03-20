@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Routes, Route, NavLink, Navigate } from 'react-router-dom'
+import { Routes, Route, NavLink, Navigate, useLocation } from 'react-router-dom'
 import LiveStatus from './pages/LiveStatus'
 import SignalDetail from './pages/SignalDetail'
 import Briefs from './pages/Briefs'
@@ -117,18 +117,7 @@ function DashboardLayout({ children }) {
   )
 }
 
-export default function App() {
-  const location = window.location.pathname
-
-  // Public routes — bypass password gate entirely
-  if (location === '/public') {
-    return <PublicScore />
-  }
-  if (location === '/terms') {
-    return <Terms />
-  }
-
-  // All other routes — password protected
+function ProtectedDashboard() {
   return (
     <PasswordGate>
       <DashboardLayout>
@@ -143,4 +132,15 @@ export default function App() {
       </DashboardLayout>
     </PasswordGate>
   )
+}
+
+export default function App() {
+  const { pathname } = useLocation()
+
+  // Public routes — no password gate, no dashboard layout
+  if (pathname === '/public') return <PublicScore />
+  if (pathname === '/terms') return <Terms />
+
+  // Everything else — password protected dashboard
+  return <ProtectedDashboard />
 }
