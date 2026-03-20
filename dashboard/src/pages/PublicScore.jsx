@@ -61,7 +61,7 @@ export default function PublicScore() {
   if (loading) {
     return (
       <div className="min-h-screen bg-navy flex items-center justify-center">
-        <div className="text-gray-500 font-mono text-sm">Loading...</div>
+        <div className="text-white font-mono text-sm">Loading...</div>
       </div>
     )
   }
@@ -69,7 +69,7 @@ export default function PublicScore() {
   if (!latest) {
     return (
       <div className="min-h-screen bg-navy flex items-center justify-center">
-        <div className="text-gray-500 font-mono text-sm">No score data available</div>
+        <div className="text-white font-mono text-sm">No score data available</div>
       </div>
     )
   }
@@ -86,25 +86,31 @@ export default function PublicScore() {
       ) / 100
 
   const isDataGap = latest.status_label === 'DATA GAP'
+  const statusClean = (latest.status_label || '').replace(' (PARTIAL DATA)', '')
 
   return (
     <div className="min-h-screen bg-navy flex flex-col items-center justify-center px-4 py-12">
       <div className="max-w-lg w-full text-center space-y-6">
-        {/* Header */}
+        {/* Headline */}
         <div>
-          <h1 className="text-gold font-mono text-xs uppercase tracking-[0.3em] mb-1">
-            Hormuz Intelligence Platform
+          <h1 className="text-gold font-mono text-sm uppercase tracking-[0.3em] mb-2 font-bold">
+            Strait of Hormuz Risk Monitor
           </h1>
-          <div className="w-16 h-px bg-gold mx-auto" />
+          <div className="w-16 h-px bg-gold mx-auto mb-4" />
+          <p className="text-white font-mono text-xs leading-relaxed px-4">
+            The Strait carries 20% of global oil supply. This score tracks disruption risk
+            using 5 signal layers — including insurance underwriter data that moves 3–5 weeks
+            before news reaches markets.
+          </p>
         </div>
 
         {/* Score */}
         <div className="py-8">
           {isDataGap ? (
             <div>
-              <div className="text-6xl md:text-8xl font-mono font-bold text-gray-500">—</div>
-              <div className="mt-2 text-sm font-mono text-gray-500 tracking-widest">DATA GAP</div>
-              <p className="mt-4 text-xs font-mono text-gray-600">
+              <div className="text-6xl md:text-8xl font-mono font-bold text-white">—</div>
+              <div className="mt-2 text-sm font-mono text-white tracking-widest">DATA GAP</div>
+              <p className="mt-4 text-xs font-mono text-white">
                 Insufficient data to calculate a reliable score. Check back at the next update cycle.
               </p>
             </div>
@@ -118,51 +124,50 @@ export default function PublicScore() {
           )}
         </div>
 
-        {/* Score Disclaimer */}
-        <p className="text-gray-600 font-mono text-[10px] leading-relaxed px-6 max-w-md">
-          The HNI is a data intelligence composite for informational purposes only.
-          Not a prediction, recommendation, or financial advice.
+        {/* Score Context */}
+        <p className="text-white font-mono text-xs leading-relaxed px-4">
+          {statusClean} — Diplomatic and insurance signals are driving current readings.
+          Subscribers receive the full signal breakdown and daily intelligence brief.
         </p>
 
         {/* Last Updated */}
-        <div className="text-gray-600 font-mono text-xs mt-2">
+        <div className="text-white font-mono text-xs mt-2">
           Last updated: {new Date(latest.calculated_at || latest.score_date).toLocaleString()}
         </div>
 
         {/* Alert Sentence */}
         {alertSentence && (
-          <p className="text-gray-400 font-mono text-sm leading-relaxed px-4">
+          <p className="text-white font-mono text-sm leading-relaxed px-4">
             {alertSentence}
-          </p>
-        )}
-
-        {/* Primary Driver */}
-        {brief?.primary_driver && (
-          <p className="text-gray-500 font-mono text-xs italic px-4">
-            {brief.primary_driver}
           </p>
         )}
 
         {/* CTA */}
         <div className="pt-6">
+          <p className="text-white font-mono text-xs mb-4 px-4">
+            You're seeing the score. Subscribers see why — and which signals moved first.
+          </p>
           <a
             href="https://hormuzintelligence.com/subscribe"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-block px-8 py-3 bg-gold text-navy font-mono text-sm font-bold uppercase tracking-wider hover:bg-gold-light"
           >
-            Subscribe for daily intelligence brief — from $49/month
+            Get the Daily Intelligence Brief — From $49/month
           </a>
-          <p className="text-gray-600 font-mono text-[10px] mt-2">
+          <p className="text-white font-mono text-[10px] mt-3">
+            Includes: daily brief, signal drivers, velocity direction, and 24-hour lead analysis.
+          </p>
+          <p className="text-white font-mono text-[10px] mt-1">
             By subscribing you agree to the{' '}
-            <a href="/terms" className="text-gray-500 underline hover:text-gold">Terms of Service</a>
+            <a href="/terms" className="text-white underline hover:text-gold">Terms of Service</a>
           </p>
         </div>
 
         {/* Disclaimer */}
-        <p className="text-gray-700 font-mono text-[10px] leading-relaxed px-4 pt-4">
-          This score provides data intelligence for informational purposes only.
-          It does not constitute financial, legal, or operational advice.
+        <p className="text-white font-mono text-[10px] leading-relaxed px-4 pt-4">
+          The HNI is a data intelligence composite for informational purposes only.
+          Not a prediction, recommendation, or financial advice.
         </p>
       </div>
     </div>
