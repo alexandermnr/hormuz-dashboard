@@ -17,7 +17,7 @@ export default function PublicScore() {
 
   useEffect(() => {
     if (latest) {
-      document.title = `Hormuz Risk Index: ${Math.round(latest.composite_hni)} — ${latest.status_label}`
+      document.title = `Hormuz Risk Index: ${Math.round(latest.composite_hni || 0)} — ${latest.status_label}`
     }
   }, [latest])
 
@@ -74,6 +74,17 @@ export default function PublicScore() {
     )
   }
 
+  // Calculate composite from layer scores if composite_hni is null
+  const computedScore = latest.composite_hni != null
+    ? latest.composite_hni
+    : Math.round(
+        ((latest.layer1_score || 0) * 0.35 +
+         (latest.layer2_score || 0) * 0.10 +
+         (latest.layer3_score || 0) * 0.35 +
+         (latest.layer4_score || 0) * 0.05 +
+         (latest.layer5_score || 0) * 0.15) * 100
+      ) / 100
+
   const isDataGap = latest.status_label === 'DATA GAP'
 
   return (
@@ -99,7 +110,7 @@ export default function PublicScore() {
             </div>
           ) : (
             <>
-              <ScoreDisplay score={latest.composite_hni} status={latest.status_label} size="large" />
+              <ScoreDisplay score={computedScore} status={latest.status_label} size="large" />
               <div className="mt-4">
                 <VelocityArrow velocity={latest.score_velocity} />
               </div>
