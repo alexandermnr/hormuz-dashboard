@@ -132,7 +132,7 @@ export default function PublicScore() {
 
         {/* Last Updated */}
         <div className="text-white font-mono text-xs mt-2">
-          Last updated: {new Date(latest.calculated_at || latest.score_date).toLocaleString()}
+          Last updated: {latest.score_date}
         </div>
 
         {/* Alert Sentence */}
