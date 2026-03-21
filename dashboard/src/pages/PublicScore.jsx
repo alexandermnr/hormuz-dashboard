@@ -162,6 +162,11 @@ export default function PublicScore() {
             By subscribing you agree to the{' '}
             <a href="/terms" className="text-white underline hover:text-gold">Terms of Service</a>
           </p>
+          <p className="mt-3">
+            <a href="/preview" className="text-gold font-mono text-xs underline hover:text-gold/80">
+              See what Tier 2 subscribers see {'\u2192'} Preview dashboard
+            </a>
+          </p>
         </div>
 
         {/* Disclaimer */}

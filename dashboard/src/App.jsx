@@ -7,6 +7,8 @@ import Methodology from './pages/Methodology'
 import Markets from './pages/Markets'
 import Pricing from './pages/Pricing'
 import Roadmap from './pages/Roadmap'
+import Preview from './pages/Preview'
+import Trial from './pages/Trial'
 import PublicScore from './pages/PublicScore'
 import Terms from './pages/Terms'
 
@@ -126,6 +128,8 @@ export default function App() {
     <Routes>
       {/* Public routes — no password, no layout */}
       <Route path="/public" element={<PublicScore />} />
+      <Route path="/preview" element={<Preview />} />
+      <Route path="/trial" element={<Trial />} />
       <Route path="/terms" element={<Terms />} />
 
       {/* All other routes — password gated */}
