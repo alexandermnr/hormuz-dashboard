@@ -85,7 +85,7 @@ export default function PublicScore() {
          (latest.layer5_score || 0) * 0.15) * 100
       ) / 100
 
-  const isDataGap = latest.status_label === 'DATA GAP'
+  const isDataGap = !computedScore || computedScore <= 0
   const statusClean = (latest.status_label || '').replace(' (PARTIAL DATA)', '')
 
   return (
