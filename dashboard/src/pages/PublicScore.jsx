@@ -97,12 +97,12 @@ export default function PublicScore() {
   const freshnessLabel = isToday ? '\u25cf LIVE' : isYesterday ? '\u25cf 1 DAY OLD' : '\u25cf STALE'
 
   // Score legend
-  const band = computedScore >= 71 ? 0 : computedScore >= 51 ? 1 : computedScore >= 31 ? 2 : 3
+  const band = computedScore <= 30 ? 3 : computedScore <= 50 ? 2 : computedScore <= 70 ? 1 : 0
   const bands = [
-    { range: '71\u2013100', label: 'NOMINAL', desc: 'Conditions within normal parameters' },
-    { range: '51\u201370', label: 'ELEVATED', desc: 'Above-baseline readings, monitoring active' },
-    { range: '31\u201350', label: 'HIGH TENSION', desc: 'Elevated signals across key layers' },
-    { range: '0\u201330', label: 'CRITICAL', desc: 'Multiple leading indicators in stress zone' },
+    { range: '71\u2013100', label: 'NOMINAL', desc: 'Conditions within normal parameters', color: '#48bb78' },
+    { range: '51\u201370', label: 'ELEVATED', desc: 'Above-baseline readings, monitoring active', color: '#c9a84c' },
+    { range: '31\u201350', label: 'HIGH TENSION', desc: 'Elevated signals across key layers', color: '#dd6b20' },
+    { range: '0\u201330', label: 'CRITICAL', desc: 'Multiple leading indicators in stress zone', color: '#e53e3e' },
   ]
 
   return (
@@ -170,11 +170,12 @@ export default function PublicScore() {
           <table style={{width:'100%', borderCollapse:'collapse'}}>
             <tbody>
               {bands.map((b, i) => {
-                const color = i === band ? '#c9a84c' : '#666666'
+                const isActive = i === band
+                const color = isActive ? b.color : b.color + '66'
                 return (
                   <tr key={b.label}>
                     <td style={{fontFamily:'monospace', fontSize:'10px', color, padding:'3px 8px', borderBottom:'1px solid #1a2a40', width:'60px'}}>{b.range}</td>
-                    <td style={{fontFamily:'monospace', fontSize:'10px', color, padding:'3px 8px', borderBottom:'1px solid #1a2a40', fontWeight: i === band ? 'bold' : 'normal', width:'100px'}}>{b.label}</td>
+                    <td style={{fontFamily:'monospace', fontSize:'10px', color, padding:'3px 8px', borderBottom:'1px solid #1a2a40', fontWeight: isActive ? 'bold' : 'normal', width:'100px'}}>{b.label}</td>
                     <td style={{fontFamily:'monospace', fontSize:'10px', color, padding:'3px 8px', borderBottom:'1px solid #1a2a40'}}>{b.desc}</td>
                   </tr>
                 )
