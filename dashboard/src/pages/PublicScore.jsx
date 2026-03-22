@@ -88,6 +88,23 @@ export default function PublicScore() {
   const isDataGap = !computedScore || computedScore <= 0
   const statusClean = (latest.status_label || '').replace(' (PARTIAL DATA)', '')
 
+  // Freshness indicator
+  const today = new Date().toISOString().split('T')[0]
+  const scoreDate = latest.score_date || ''
+  const isToday = scoreDate === today
+  const isYesterday = scoreDate === new Date(Date.now() - 86400000).toISOString().split('T')[0]
+  const freshnessColor = isToday ? '#48bb78' : isYesterday ? '#c9a84c' : '#e53e3e'
+  const freshnessLabel = isToday ? '\u25cf LIVE' : isYesterday ? '\u25cf 1 DAY OLD' : '\u25cf STALE'
+
+  // Score legend
+  const band = computedScore >= 71 ? 0 : computedScore >= 51 ? 1 : computedScore >= 31 ? 2 : 3
+  const bands = [
+    { range: '71\u2013100', label: 'NOMINAL', desc: 'Conditions within normal parameters' },
+    { range: '51\u201370', label: 'ELEVATED', desc: 'Above-baseline readings, monitoring active' },
+    { range: '31\u201350', label: 'HIGH TENSION', desc: 'Elevated signals across key layers' },
+    { range: '0\u201330', label: 'CRITICAL', desc: 'Multiple leading indicators in stress zone' },
+  ]
+
   return (
     <div className="min-h-screen bg-navy flex flex-col items-center justify-center px-4 py-12">
       <div className="max-w-lg w-full text-center space-y-6">
@@ -120,6 +137,9 @@ export default function PublicScore() {
               <div className="mt-4">
                 <VelocityArrow velocity={latest.score_velocity} />
               </div>
+              <p style={{fontFamily:'monospace', fontSize:'11px', color:'#a08840', margin:'4px 0 12px 0', letterSpacing:'0.05em'}}>
+                5 SIGNAL LAYERS &nbsp;|&nbsp; 12 ACTIVE SIGNALS &nbsp;|&nbsp; UPDATED EVERY 6 HOURS
+              </p>
             </>
           )}
         </div>
@@ -134,6 +154,9 @@ export default function PublicScore() {
         <div className="text-white font-mono text-xs mt-2">
           Last updated: {latest.score_date}
         </div>
+        <p style={{fontFamily:'monospace', fontSize:'11px', color:freshnessColor, margin:'4px 0', letterSpacing:'0.05em'}}>
+          {freshnessLabel} &nbsp;|&nbsp; 12 SIGNALS ACTIVE
+        </p>
 
         {/* Alert Sentence */}
         {alertSentence && (
@@ -141,6 +164,27 @@ export default function PublicScore() {
             {alertSentence}
           </p>
         )}
+
+        {/* Score Legend */}
+        <div style={{margin:'0 auto', maxWidth:'400px'}}>
+          <table style={{width:'100%', borderCollapse:'collapse'}}>
+            <tbody>
+              {bands.map((b, i) => {
+                const color = i === band ? '#c9a84c' : '#666666'
+                return (
+                  <tr key={b.label}>
+                    <td style={{fontFamily:'monospace', fontSize:'10px', color, padding:'3px 8px', borderBottom:'1px solid #1a2a40', width:'60px'}}>{b.range}</td>
+                    <td style={{fontFamily:'monospace', fontSize:'10px', color, padding:'3px 8px', borderBottom:'1px solid #1a2a40', fontWeight: i === band ? 'bold' : 'normal', width:'100px'}}>{b.label}</td>
+                    <td style={{fontFamily:'monospace', fontSize:'10px', color, padding:'3px 8px', borderBottom:'1px solid #1a2a40'}}>{b.desc}</td>
+                  </tr>
+                )
+              })}
+            </tbody>
+          </table>
+          <p style={{fontFamily:'monospace', fontSize:'11px', color:'#666666', fontStyle:'italic', marginTop:'8px'}}>
+            Subscribers see which signals moved first — and how far ahead of markets.
+          </p>
+        </div>
 
         {/* CTA */}
         <div className="pt-6">
