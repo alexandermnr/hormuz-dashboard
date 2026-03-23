@@ -8,6 +8,8 @@ export default function PublicScore() {
   const [brief, setBrief] = useState(null)
   const [alertSentence, setAlertSentence] = useState('')
   const [loading, setLoading] = useState(true)
+  const [captureEmail, setCaptureEmail] = useState('')
+  const [captureStatus, setCaptureStatus] = useState('idle') // idle | sending | success | error
 
   useEffect(() => {
     fetchData()
@@ -55,6 +57,36 @@ export default function PublicScore() {
       console.error('Failed to fetch public data:', err)
     } finally {
       setLoading(false)
+    }
+  }
+
+  async function handleEmailCapture() {
+    if (captureStatus === 'sending') return
+    const trimmed = captureEmail.trim()
+    if (!trimmed || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmed)) {
+      setCaptureStatus('error')
+      return
+    }
+    setCaptureStatus('sending')
+    try {
+      const res = await fetch(
+        'https://tojefhjisctafyvbguqt.supabase.co/functions/v1/capture-email',
+        {
+          method: 'POST',
+          headers: {
+            'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRvamVmaGppc2N0YWZ5dmJndXF0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM2NTIzOTcsImV4cCI6MjA4OTIyODM5N30.65VpUSd4hwbcilaK48MAnpIpdJdXsjJosnzTC04ebNs',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ email: trimmed, source: 'public_page' }),
+        }
+      )
+      if (res.ok) {
+        setCaptureStatus('success')
+      } else {
+        setCaptureStatus('error')
+      }
+    } catch {
+      setCaptureStatus('error')
     }
   }
 
@@ -185,6 +217,59 @@ export default function PublicScore() {
           <p style={{fontFamily:'monospace', fontSize:'11px', color:'#666666', fontStyle:'italic', marginTop:'8px'}}>
             Subscribers see which signals moved first — and how far ahead of markets.
           </p>
+        </div>
+
+        {/* Email Capture */}
+        <div style={{margin:'24px 0', padding:'24px 16px', borderTop:'1px solid #1a2a40', borderBottom:'1px solid #1a2a40'}}>
+          {captureStatus === 'success' ? (
+            <p style={{fontFamily:'monospace', fontSize:'14px', color:'#48bb78', letterSpacing:'0.03em'}}>
+              {'\u2713'} Check your inbox {'\u2014'} your first score is on its way.
+            </p>
+          ) : (
+            <>
+              <h2 style={{fontFamily:'Georgia, serif', fontSize:'18px', color:'#c9a84c', margin:'0 0 6px 0'}}>
+                Get the daily score in your inbox {'\u2014'} free
+              </h2>
+              <p style={{fontFamily:'monospace', fontSize:'11px', color:'#999999', margin:'0 0 16px 0'}}>
+                No credit card. No commitment. Unsubscribe anytime.
+              </p>
+              <div style={{display:'flex', gap:'8px', maxWidth:'400px', margin:'0 auto'}}>
+                <input
+                  type="email"
+                  value={captureEmail}
+                  onChange={(e) => setCaptureEmail(e.target.value)}
+                  onKeyDown={(e) => { if (e.key === 'Enter') handleEmailCapture() }}
+                  placeholder="you@example.com"
+                  disabled={captureStatus === 'sending'}
+                  style={{
+                    flex:1, padding:'10px 14px', fontFamily:'monospace', fontSize:'13px',
+                    backgroundColor:'#0D1B2A', color:'#ffffff', border:'1px solid #1a2a40',
+                    outline:'none', letterSpacing:'0.03em',
+                  }}
+                />
+                <div
+                  onClick={handleEmailCapture}
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') handleEmailCapture() }}
+                  style={{
+                    padding:'10px 20px', backgroundColor:'#c9a84c', color:'#0a1628',
+                    fontFamily:'monospace', fontSize:'12px', fontWeight:'bold',
+                    letterSpacing:'0.08em', textTransform:'uppercase', cursor:'pointer',
+                    whiteSpace:'nowrap', userSelect:'none',
+                    opacity: captureStatus === 'sending' ? 0.6 : 1,
+                  }}
+                >
+                  {captureStatus === 'sending' ? 'Sending...' : 'Send me the score'}
+                </div>
+              </div>
+              {captureStatus === 'error' && (
+                <p style={{fontFamily:'monospace', fontSize:'11px', color:'#e53e3e', marginTop:'8px'}}>
+                  Something went wrong {'\u2014'} try again.
+                </p>
+              )}
+            </>
+          )}
         </div>
 
         {/* CTA */}
