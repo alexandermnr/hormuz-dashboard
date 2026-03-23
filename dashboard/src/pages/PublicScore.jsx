@@ -217,6 +217,11 @@ export default function PublicScore() {
           <p style={{fontFamily:'monospace', fontSize:'11px', color:'#666666', fontStyle:'italic', marginTop:'8px'}}>
             Subscribers see which signals moved first — and how far ahead of markets.
           </p>
+          <p style={{marginTop:'8px'}}>
+            <a href="/archive" style={{fontFamily:'monospace', fontSize:'11px', color:'#c9a84c', textDecoration:'underline'}}>
+              View 30-day score archive {'\u2192'}
+            </a>
+          </p>
         </div>
 
         {/* Email Capture */}

@@ -11,6 +11,7 @@ import Preview from './pages/Preview'
 import Trial from './pages/Trial'
 import PublicScore from './pages/PublicScore'
 import Terms from './pages/Terms'
+import ArchivePage from './pages/ArchivePage'
 
 const DASHBOARD_PASSWORD = import.meta.env.VITE_DASHBOARD_PASSWORD || ''
 
@@ -131,6 +132,7 @@ export default function App() {
       <Route path="/preview" element={<Preview />} />
       <Route path="/trial" element={<Trial />} />
       <Route path="/terms" element={<Terms />} />
+      <Route path="/archive" element={<ArchivePage />} />
 
       {/* All other routes — password gated */}
       <Route path="/" element={
