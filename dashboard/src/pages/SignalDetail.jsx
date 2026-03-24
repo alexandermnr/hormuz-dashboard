@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import posthog from 'posthog-js'
 import { supabase } from '../supabaseClient'
 
 const LAYER_MAP = {
@@ -82,7 +83,12 @@ export default function SignalDetail() {
           return (
             <button
               key={layer}
-              onClick={() => setActiveLayer(layer)}
+              onClick={() => {
+                setActiveLayer(layer)
+                if (import.meta.env.VITE_POSTHOG_KEY) {
+                  posthog.capture('signal_tab_click', { layer: LAYER_MAP[layer].name })
+                }
+              }}
               className={`px-4 py-2 text-xs font-mono uppercase tracking-wider rounded-t border-b-2 transition-none relative ${
                 activeLayer === layer
                   ? 'bg-navy-light text-gold border-gold'

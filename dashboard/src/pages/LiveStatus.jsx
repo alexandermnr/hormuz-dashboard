@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { LineChart, Line, ResponsiveContainer, XAxis, YAxis, Tooltip, CartesianGrid } from 'recharts'
 import { supabase } from '../supabaseClient'
+import { TrackedSection } from '../App'
 import ScoreDisplay from '../components/ScoreDisplay'
 import VelocityArrow from '../components/VelocityArrow'
 import LayerBars from '../components/LayerBars'
@@ -71,7 +72,7 @@ export default function LiveStatus() {
         </div>
       )}
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <TrackedSection name="score_block" className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Score Block */}
         <div className="bg-navy-light border border-navy-mid rounded p-6 flex flex-col items-center justify-center">
           <ScoreDisplay score={latest.composite_hni} status={latest.status_label} />
@@ -113,10 +114,10 @@ export default function LiveStatus() {
         <div className="bg-navy-light border border-navy-mid rounded p-4">
           <LayerBars layerScores={latest} />
         </div>
-      </div>
+      </TrackedSection>
 
       {/* 30-day Chart */}
-      <div className="bg-navy-light border border-navy-mid rounded p-4">
+      <TrackedSection name="30day_chart" className="bg-navy-light border border-navy-mid rounded p-4">
         <h3 className="text-gold text-xs font-mono uppercase tracking-widest mb-3">30-Day History</h3>
         <ResponsiveContainer width="100%" height={200}>
           <LineChart data={history30d}>
@@ -137,7 +138,7 @@ export default function LiveStatus() {
             <Line type="monotone" dataKey="composite_hni" stroke="#C49A1A" strokeWidth={2} dot={false} />
           </LineChart>
         </ResponsiveContainer>
-      </div>
+      </TrackedSection>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Primary Driver */}
@@ -153,7 +154,7 @@ export default function LiveStatus() {
       </div>
 
       {/* Correlated Asset Watchlist */}
-      <div className="bg-navy-light border border-navy-mid rounded p-4">
+      <TrackedSection name="correlated_assets" className="bg-navy-light border border-navy-mid rounded p-4">
         <h3 className="text-gold text-xs font-mono uppercase tracking-widest mb-1">Correlated Asset Watchlist</h3>
         <p className="text-gray-500 text-[10px] font-mono uppercase tracking-wider mb-3">
           Historical Correlations {'\u2014'} Not a Recommendation
@@ -201,7 +202,7 @@ export default function LiveStatus() {
             </tbody>
           </table>
         </div>
-      </div>
+      </TrackedSection>
     </div>
   )
 }

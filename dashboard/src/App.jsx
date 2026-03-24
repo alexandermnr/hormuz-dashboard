@@ -1,5 +1,6 @@
-import React, { useState } from 'react'
-import { Routes, Route, NavLink, Navigate } from 'react-router-dom'
+import React, { useState, useEffect } from 'react'
+import { Routes, Route, NavLink, Navigate, useLocation } from 'react-router-dom'
+import posthog from 'posthog-js'
 import LiveStatus from './pages/LiveStatus'
 import SignalDetail from './pages/SignalDetail'
 import Briefs from './pages/Briefs'
@@ -14,6 +15,28 @@ import Terms from './pages/Terms'
 import ArchivePage from './pages/ArchivePage'
 
 const DASHBOARD_PASSWORD = import.meta.env.VITE_DASHBOARD_PASSWORD || ''
+
+export function TrackedSection({ name, children, className = '' }) {
+  const ref = React.useRef(null)
+
+  useEffect(() => {
+    if (!import.meta.env.VITE_POSTHOG_KEY || !ref.current) return
+    const el = ref.current
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          posthog.capture('section_viewed', { section: name })
+          observer.unobserve(el)
+        }
+      },
+      { threshold: 0.3 }
+    )
+    observer.observe(el)
+    return () => observer.unobserve(el)
+  }, [name])
+
+  return <div ref={ref} className={className}>{children}</div>
+}
 
 const NAV_ITEMS = [
   { path: '/', label: 'Live Status', icon: '01' },
@@ -125,6 +148,14 @@ function DashboardLayout({ children }) {
 }
 
 export default function App() {
+  const location = useLocation()
+
+  useEffect(() => {
+    if (import.meta.env.VITE_POSTHOG_KEY) {
+      posthog.capture('page_view', { route: location.pathname })
+    }
+  }, [location.pathname])
+
   return (
     <Routes>
       {/* Public routes — no password, no layout */}
