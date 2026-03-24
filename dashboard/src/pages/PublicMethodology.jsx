@@ -13,6 +13,20 @@ The Hormuz Navigation Index (HNI) is a daily composite risk score ranging from 0
 
 Iranian rial black market rate, diplomatic flight activity in Gulf airspace, IAEA enrichment compliance metrics. Captures political intent and diplomatic signaling.
 
+#### IAEA Enrichment Signal \u2014 Two-Tier Keyword Scoring
+
+Signal source: Exa neural search across AP, Reuters, Arms Control Association, Al Jazeera, iaea.org \u2014 last 7 days.
+
+**Tier 1 \u2014 Leading Indicators (1.5x weight, 15 pts each):**
+Fires 30\u201360 days before enrichment announcements. Keywords: access denied, additional protocol, undeclared, expelled, monitoring gap, snap inspection, non-compliance, safeguards agreement, cameras removed, seals broken, inspector access. When matched: notes prefixed with \u201cLEADING SIGNAL DETECTED.\u201d
+
+**Tier 2 \u2014 Standard Indicators (1.0x weight, 10 pts each):**
+Confirms known enrichment events. Keywords: enrich, uranium, centrifuge, nuclear, iaea, weapons-grade, fissile, heavy water, reprocessing, natanz, fordow, 60%, 90%.
+
+**Scoring:** \`raw_value = (leading_matches \u00d7 15) + (standard_matches \u00d7 10)\`, capped at 100.
+
+**Rationale:** Leading keywords reflect inspector access restrictions and monitoring gaps that historically precede formal enrichment announcements by 30\u201360 days. Standard keywords confirm events already in the public domain.
+
 ### Layer 2: Maritime (10% weight)
 
 Strait vessel transit count, Bandar Abbas port activity index, VLCC Arabian Gulf-East freight rate. Monitors physical flow through the corridor.
