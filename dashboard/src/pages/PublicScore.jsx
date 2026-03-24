@@ -309,6 +309,11 @@ export default function PublicScore() {
           The HNI is a data intelligence composite for informational purposes only.
           Not a prediction, recommendation, or financial advice.
         </p>
+        <p className="mt-2">
+          <a href="/methodology" style={{fontFamily:'monospace', fontSize:'11px', color:'#c9a84c', textDecoration:'underline'}}>
+            Methodology
+          </a>
+        </p>
       </div>
     </div>
   )

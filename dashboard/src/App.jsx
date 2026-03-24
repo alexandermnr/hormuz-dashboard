@@ -13,6 +13,7 @@ import Trial from './pages/Trial'
 import PublicScore from './pages/PublicScore'
 import Terms from './pages/Terms'
 import ArchivePage from './pages/ArchivePage'
+import PublicMethodology from './pages/PublicMethodology'
 
 const DASHBOARD_PASSWORD = import.meta.env.VITE_DASHBOARD_PASSWORD || ''
 
@@ -164,6 +165,7 @@ export default function App() {
       <Route path="/trial" element={<Trial />} />
       <Route path="/terms" element={<Terms />} />
       <Route path="/archive" element={<ArchivePage />} />
+      <Route path="/methodology" element={<PublicMethodology />} />
 
       {/* All other routes — password gated */}
       <Route path="/" element={
@@ -181,11 +183,7 @@ export default function App() {
           <DashboardLayout><Briefs /></DashboardLayout>
         </PasswordGate>
       } />
-      <Route path="/methodology" element={
-        <PasswordGate>
-          <DashboardLayout><Methodology /></DashboardLayout>
-        </PasswordGate>
-      } />
+      {/* /methodology is now public — see public routes above */}
       <Route path="/markets" element={
         <PasswordGate>
           <DashboardLayout><Markets /></DashboardLayout>
