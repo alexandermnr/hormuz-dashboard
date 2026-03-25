@@ -14,6 +14,7 @@ import PublicScore from './pages/PublicScore'
 import Terms from './pages/Terms'
 import ArchivePage from './pages/ArchivePage'
 import PublicMethodology from './pages/PublicMethodology'
+import EventLog from './pages/EventLog'
 
 const DASHBOARD_PASSWORD = import.meta.env.VITE_DASHBOARD_PASSWORD || ''
 
@@ -47,6 +48,7 @@ const NAV_ITEMS = [
   { path: '/markets', label: 'Markets', icon: '05' },
   { path: '/pricing', label: 'Pricing', icon: '06' },
   { path: '/roadmap', label: 'Roadmap', icon: '07' },
+  { path: '/event-log', label: 'Event Log', icon: '08' },
 ]
 
 function PasswordGate({ children }) {
@@ -197,6 +199,11 @@ export default function App() {
       <Route path="/roadmap" element={
         <PasswordGate>
           <DashboardLayout><Roadmap /></DashboardLayout>
+        </PasswordGate>
+      } />
+      <Route path="/event-log" element={
+        <PasswordGate>
+          <DashboardLayout><EventLog /></DashboardLayout>
         </PasswordGate>
       } />
       <Route path="*" element={<Navigate to="/" replace />} />
