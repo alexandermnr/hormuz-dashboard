@@ -9,8 +9,9 @@ const ROW_TINTS = { ESCALATING: 'rgba(229,62,62,0.08)', 'DE-ESCALATING': 'rgba(7
 export default function EventLog() {
   var [entries, setEntries] = useState([])
   var [loading, setLoading] = useState(true)
+  var [error, setError] = useState(null)
   var [expanded, setExpanded] = useState({})
-  var [dateRange, setDateRange] = useState(7)
+  var [dateRange, setDateRange] = useState(0)
   var [filterConflict, setFilterConflict] = useState('')
   var [filterTiming, setFilterTiming] = useState('')
 
@@ -20,17 +21,27 @@ export default function EventLog() {
 
   function fetchData() {
     setLoading(true)
-    var cutoff = new Date(Date.now() - dateRange * 86400000).toISOString()
-    supabase
+    setError(null)
+    var query = supabase
       .from('live_event_log')
       .select('*')
-      .gte('created_at', cutoff)
       .order('created_at', { ascending: false })
       .limit(200)
-      .then(function (res) {
+    if (dateRange > 0) {
+      var cutoff = new Date(Date.now() - dateRange * 86400000).toISOString()
+      query = query.gte('created_at', cutoff)
+    }
+    query.then(function (res) {
+      console.log('EventLog query result:', res)
+      if (res.error) {
+        console.error('EventLog error:', res.error)
+        setError(res.error.message || JSON.stringify(res.error))
+        setEntries([])
+      } else {
         setEntries(res.data || [])
-        setLoading(false)
-      })
+      }
+      setLoading(false)
+    })
   }
 
   var filtered = useMemo(function () {
@@ -107,6 +118,16 @@ export default function EventLog() {
   }
 
   return React.createElement('div', { className: 'space-y-6' },
+    // Error display
+    error && React.createElement('div', {
+      style: { backgroundColor: 'rgba(229,62,62,0.1)', border: '1px solid #e53e3e', borderRadius: '6px', padding: '12px' }
+    },
+      React.createElement('p', { style: { fontFamily: 'monospace', fontSize: '12px', color: '#e53e3e' } },
+        'Error loading event log: ' + error),
+      React.createElement('p', { style: { fontFamily: 'monospace', fontSize: '10px', color: '#888', marginTop: '4px' } },
+        'Check RLS policy on live_event_log table. Anon read access required.')
+    ),
+
     // Header
     React.createElement('div', null,
       React.createElement('h1', { className: 'text-gold font-mono text-xs uppercase tracking-widest mb-1' }, 'LIVE EVENT LOG'),
@@ -146,6 +167,7 @@ export default function EventLog() {
         value: dateRange, onChange: function (e) { setDateRange(Number(e.target.value)) },
         className: 'bg-navy-light border border-navy-mid text-gray-300 font-mono text-xs px-3 py-1.5 rounded'
       },
+        React.createElement('option', { value: 0 }, 'All entries'),
         React.createElement('option', { value: 7 }, 'Last 7 days'),
         React.createElement('option', { value: 14 }, 'Last 14 days'),
         React.createElement('option', { value: 30 }, 'Last 30 days')
