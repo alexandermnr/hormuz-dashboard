@@ -15,6 +15,7 @@ import Terms from './pages/Terms'
 import ArchivePage from './pages/ArchivePage'
 import PublicMethodology from './pages/PublicMethodology'
 import EventLog from './pages/EventLog'
+import Accuracy from './pages/Accuracy'
 
 const DASHBOARD_PASSWORD = import.meta.env.VITE_DASHBOARD_PASSWORD || ''
 
@@ -168,6 +169,7 @@ export default function App() {
       <Route path="/terms" element={<Terms />} />
       <Route path="/archive" element={<ArchivePage />} />
       <Route path="/methodology" element={<PublicMethodology />} />
+      <Route path="/accuracy" element={<Accuracy />} />
 
       {/* All other routes — password gated */}
       <Route path="/" element={
