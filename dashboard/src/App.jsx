@@ -16,6 +16,10 @@ import ArchivePage from './pages/ArchivePage'
 import PublicMethodology from './pages/PublicMethodology'
 import EventLog from './pages/EventLog'
 import Accuracy from './pages/Accuracy'
+import GritTerminalLanding from './pages/GritTerminalLanding'
+import HormuzLanding from './pages/HormuzLanding'
+import ComingSoon from './pages/ComingSoon'
+import ExtractionLog from './pages/ExtractionLog'
 
 const DASHBOARD_PASSWORD = import.meta.env.VITE_DASHBOARD_PASSWORD || ''
 
@@ -42,14 +46,15 @@ export function TrackedSection({ name, children, className = '' }) {
 }
 
 const NAV_ITEMS = [
-  { path: '/', label: 'Live Status', icon: '01' },
-  { path: '/signals', label: 'Signal Detail', icon: '02' },
-  { path: '/briefs', label: 'Briefs', icon: '03' },
-  { path: '/methodology', label: 'Methodology', icon: '04' },
-  { path: '/markets', label: 'Markets', icon: '05' },
-  { path: '/pricing', label: 'Pricing', icon: '06' },
-  { path: '/roadmap', label: 'Roadmap', icon: '07' },
-  { path: '/event-log', label: 'Event Log', icon: '08' },
+  { path: '/app', label: 'Live Status', icon: '01' },
+  { path: '/app/signals', label: 'Signal Detail', icon: '02' },
+  { path: '/app/briefs', label: 'Briefs', icon: '03' },
+  { path: '/app/methodology', label: 'Methodology', icon: '04' },
+  { path: '/app/markets', label: 'Markets', icon: '05' },
+  { path: '/app/pricing', label: 'Pricing', icon: '06' },
+  { path: '/app/roadmap', label: 'Roadmap', icon: '07' },
+  { path: '/app/event-log', label: 'Event Log', icon: '08' },
+  { path: '/app/data-log', label: 'Extraction Log', icon: '09' },
 ]
 
 function PasswordGate({ children }) {
@@ -120,7 +125,7 @@ function DashboardLayout({ children }) {
             <NavLink
               key={item.path}
               to={item.path}
-              end={item.path === '/'}
+              end={item.path === '/app'}
               className={({ isActive }) =>
                 `block px-4 py-2.5 font-mono text-xs uppercase tracking-wider border-l-2 ${
                   isActive
@@ -162,50 +167,90 @@ export default function App() {
 
   return (
     <Routes>
-      {/* Public routes — no password, no layout */}
-      <Route path="/public" element={<PublicScore />} />
+      {/* ========================================= */}
+      {/* PUBLIC ROUTES — no password, no layout    */}
+      {/* ========================================= */}
+      <Route path="/" element={<GritTerminalLanding />} />
+      <Route path="/hormuz" element={<HormuzLanding />} />
+      <Route path="/red-sea" element={
+        <ComingSoon
+          indexName="RED SEA"
+          fullName="Red Sea-Suez Corridor Index"
+          description="Composite disruption index tracking Houthi activity, Suez transit volumes, container rerouting costs, and Red Sea war risk premiums."
+          launchDate="Q3 2026"
+        />
+      } />
+      <Route path="/semiconductors" element={
+        <ComingSoon
+          indexName="SEMICONDUCTORS"
+          fullName="Semiconductor Supply Chain Stress Index"
+          description="Multi-signal index tracking Taiwan Strait tension, TSMC production indicators, rare earth export controls, and chip inventory drawdowns."
+          launchDate="Q4 2026"
+        />
+      } />
+      <Route path="/food-supply" element={
+        <ComingSoon
+          indexName="FOOD SUPPLY"
+          fullName="Global Food Supply Chain Cascade Index"
+          description="Composite index tracking Black Sea grain corridor status, fertilizer export disruptions, El Ni&ntilde;o crop stress, and strategic reserve drawdowns."
+          launchDate="Q4 2026"
+        />
+      } />
+      <Route path="/methodology" element={<PublicMethodology />} />
+      <Route path="/pricing" element={<Pricing />} />
+      <Route path="/accuracy" element={<Accuracy />} />
+      <Route path="/terms" element={<Terms />} />
       <Route path="/preview" element={<Preview />} />
       <Route path="/trial" element={<Trial />} />
-      <Route path="/terms" element={<Terms />} />
       <Route path="/archive" element={<ArchivePage />} />
-      <Route path="/methodology" element={<PublicMethodology />} />
-      <Route path="/accuracy" element={<Accuracy />} />
+      <Route path="/public" element={<Navigate to="/hormuz" replace />} />
 
-      {/* All other routes — password gated */}
-      <Route path="/" element={
+      {/* ========================================= */}
+      {/* INTERNAL ROUTES — password gated          */}
+      {/* ========================================= */}
+      <Route path="/app" element={
         <PasswordGate>
           <DashboardLayout><LiveStatus /></DashboardLayout>
         </PasswordGate>
       } />
-      <Route path="/signals" element={
+      <Route path="/app/signals" element={
         <PasswordGate>
           <DashboardLayout><SignalDetail /></DashboardLayout>
         </PasswordGate>
       } />
-      <Route path="/briefs" element={
+      <Route path="/app/briefs" element={
         <PasswordGate>
           <DashboardLayout><Briefs /></DashboardLayout>
         </PasswordGate>
       } />
-      {/* /methodology is now public — see public routes above */}
-      <Route path="/markets" element={
+      <Route path="/app/methodology" element={
+        <PasswordGate>
+          <DashboardLayout><Methodology /></DashboardLayout>
+        </PasswordGate>
+      } />
+      <Route path="/app/markets" element={
         <PasswordGate>
           <DashboardLayout><Markets /></DashboardLayout>
         </PasswordGate>
       } />
-      <Route path="/pricing" element={
+      <Route path="/app/pricing" element={
         <PasswordGate>
           <DashboardLayout><Pricing /></DashboardLayout>
         </PasswordGate>
       } />
-      <Route path="/roadmap" element={
+      <Route path="/app/roadmap" element={
         <PasswordGate>
           <DashboardLayout><Roadmap /></DashboardLayout>
         </PasswordGate>
       } />
-      <Route path="/event-log" element={
+      <Route path="/app/event-log" element={
         <PasswordGate>
           <DashboardLayout><EventLog /></DashboardLayout>
+        </PasswordGate>
+      } />
+      <Route path="/app/data-log" element={
+        <PasswordGate>
+          <DashboardLayout><ExtractionLog /></DashboardLayout>
         </PasswordGate>
       } />
       <Route path="*" element={<Navigate to="/" replace />} />

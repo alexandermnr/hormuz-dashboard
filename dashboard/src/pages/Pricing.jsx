@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { supabase } from '../supabaseClient'
 
 const TIERS = [
   {
@@ -57,6 +58,7 @@ const TIERS = [
     description: 'For risk teams and portfolio managers who need direct access.',
     featured: false,
     enterprise: false,
+    comingSoon: true,
     included: [
       'Everything in Dashboard',
       'Monthly 30-min analyst call',
@@ -80,6 +82,7 @@ const TIERS = [
     description: 'Bespoke deliverables, SLA guarantees, and direct wire invoicing.',
     featured: false,
     enterprise: true,
+    comingSoon: true,
     included: [
       'Everything in Analyst',
       'Custom backtest reports ($7,500\u2013$15,000 each)',
@@ -97,6 +100,24 @@ const TIERS = [
 
 export default function Pricing() {
   const [annual, setAnnual] = useState(true)
+  const [waitlistEmail, setWaitlistEmail] = useState('')
+  const [waitlistStatus, setWaitlistStatus] = useState('idle')
+
+  async function handleWaitlist() {
+    const trimmed = waitlistEmail.trim()
+    if (!trimmed || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmed)) return
+    setWaitlistStatus('sending')
+    try {
+      const { error } = await supabase.from('email_captures').insert({
+        email: trimmed,
+        source: 'pricing_waitlist',
+        index_interest: 'ANALYST_WAITLIST',
+      })
+      setWaitlistStatus(error ? 'error' : 'success')
+    } catch {
+      setWaitlistStatus('error')
+    }
+  }
 
   return (
     <div className="space-y-10">
@@ -158,7 +179,12 @@ export default function Pricing() {
             }`}
           >
             {/* Badge */}
-            {tier.featured && (
+            {tier.comingSoon && (
+              <p className="text-amber-400 font-mono text-[10px] uppercase tracking-wider mb-2 border border-amber-400/50 inline-block px-2 py-0.5">
+                COMING SOON
+              </p>
+            )}
+            {tier.featured && !tier.comingSoon && (
               <p className="text-gold font-mono text-[10px] uppercase tracking-wider mb-2">
                 Most Popular
               </p>
@@ -219,6 +245,34 @@ export default function Pricing() {
             </button>
           </div>
         ))}
+      </div>
+
+      {/* Waitlist for Analyst/Terminal */}
+      <div className="border border-navy-mid p-6 mt-2">
+        <p className="text-white font-mono text-xs mb-2">
+          Analyst and Terminal tiers launch with multi-index coverage. Join the waitlist.
+        </p>
+        {waitlistStatus === 'success' ? (
+          <p className="text-emerald-400 font-mono text-[10px]">&#10003; You're on the waitlist.</p>
+        ) : (
+          <div className="flex gap-2 max-w-md">
+            <input
+              type="email"
+              value={waitlistEmail}
+              onChange={(e) => setWaitlistEmail(e.target.value)}
+              onKeyDown={(e) => e.key === 'Enter' && handleWaitlist()}
+              placeholder="you@example.com"
+              className="flex-1 bg-navy border border-navy-mid text-white font-mono text-[10px] px-3 py-2 focus:border-gold focus:outline-none"
+            />
+            <button
+              onClick={handleWaitlist}
+              disabled={waitlistStatus === 'sending'}
+              className="border border-gold text-gold font-mono text-[10px] uppercase tracking-wider px-4 py-2 hover:bg-gold/10 disabled:opacity-50"
+            >
+              {waitlistStatus === 'sending' ? '...' : 'JOIN WAITLIST'}
+            </button>
+          </div>
+        )}
       </div>
 
       {/* Disclaimer */}
