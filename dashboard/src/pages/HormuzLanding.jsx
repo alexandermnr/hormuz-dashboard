@@ -19,17 +19,19 @@ const FEATURES = [
 
 function getStatusLabel(score) {
   if (score == null) return 'NO DATA'
-  if (score <= 30) return 'CRITICAL'
-  if (score <= 50) return 'HIGH TENSION'
-  if (score <= 70) return 'ELEVATED'
-  return 'NOMINAL'
+  if (score >= 85) return 'EXTREME'
+  if (score >= 75) return 'CRITICAL'
+  if (score >= 60) return 'HIGH TENSION'
+  if (score >= 40) return 'ELEVATED RISK'
+  return 'LOW RISK'
 }
 
 function getStatusColor(score) {
   if (score == null) return '#888'
-  if (score <= 30) return '#e53e3e'
-  if (score <= 50) return '#dd6b20'
-  if (score <= 70) return '#c9a84c'
+  if (score >= 85) return '#7f1d1d'
+  if (score >= 75) return '#e53e3e'
+  if (score >= 60) return '#dd6b20'
+  if (score >= 40) return '#c9a84c'
   return '#48bb78'
 }
 

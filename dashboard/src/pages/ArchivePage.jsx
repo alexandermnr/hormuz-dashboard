@@ -2,10 +2,11 @@ import React, { useEffect, useState } from 'react'
 import { supabase } from '../supabaseClient'
 
 const STATUS_COLORS = {
-  'NOMINAL': '#48bb78',
-  'ELEVATED': '#c9a84c',
+  'LOW RISK': '#48bb78',
+  'ELEVATED RISK': '#c9a84c',
   'HIGH TENSION': '#dd6b20',
   'CRITICAL': '#e53e3e',
+  'EXTREME': '#7f1d1d',
 }
 
 function formatDate(dateStr) {

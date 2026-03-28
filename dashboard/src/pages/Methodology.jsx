@@ -86,10 +86,11 @@ export default function Methodology() {
             </tr>
           </thead>
           <tbody className="text-gray-300">
-            <tr className="border-b border-navy-mid/30"><td className="py-1">86 &ndash; 100</td><td>NORMALIZATION</td></tr>
-            <tr className="border-b border-navy-mid/30"><td className="py-1">66 &ndash; 85</td><td>ELEVATED RISK</td></tr>
-            <tr className="border-b border-navy-mid/30"><td className="py-1">41 &ndash; 65</td><td>HIGH TENSION</td></tr>
-            <tr><td className="py-1">0 &ndash; 40</td><td>CRITICAL ALERT</td></tr>
+            <tr className="border-b border-navy-mid/30"><td className="py-1">0 &ndash; 39</td><td>LOW RISK</td></tr>
+            <tr className="border-b border-navy-mid/30"><td className="py-1">40 &ndash; 59</td><td>ELEVATED RISK</td></tr>
+            <tr className="border-b border-navy-mid/30"><td className="py-1">60 &ndash; 74</td><td>HIGH TENSION</td></tr>
+            <tr className="border-b border-navy-mid/30"><td className="py-1">75 &ndash; 84</td><td>CRITICAL</td></tr>
+            <tr><td className="py-1">85 &ndash; 100</td><td>EXTREME</td></tr>
           </tbody>
         </table>
       </section>

@@ -187,8 +187,8 @@ export default function LiveStatus() {
                 { asset: 'Shipping insurers', ticker: "Lloyd's vehicles", corr: 'High', pattern: 'Layer 5 war risk premium is their pricing input' },
               ].map((a) => {
                 const status = latest?.status_label || ''
-                const signal = status.includes('CRITICAL') ? 'CRITICAL' : status.includes('ELEVATED') || status.includes('HIGH') ? 'ELEVATED' : 'NORMAL'
-                const signalColor = signal === 'CRITICAL' ? 'text-red-400' : signal === 'ELEVATED' ? 'text-yellow-400' : 'text-green-400'
+                const signal = status.includes('EXTREME') ? 'EXTREME' : status.includes('CRITICAL') ? 'CRITICAL' : status.includes('HIGH') ? 'HIGH TENSION' : status.includes('ELEVATED') ? 'ELEVATED' : 'LOW RISK'
+                const signalColor = signal === 'EXTREME' ? 'text-red-900' : signal === 'CRITICAL' ? 'text-red-400' : signal === 'HIGH TENSION' ? 'text-orange-400' : signal === 'ELEVATED' ? 'text-yellow-400' : 'text-green-400'
                 return (
                   <tr key={a.ticker} className="border-b border-gray-800">
                     <td className="text-gray-300 font-mono text-[10px] py-2 pr-3">{a.asset}</td>

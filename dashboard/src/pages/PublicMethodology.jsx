@@ -57,10 +57,11 @@ If any signal\u2019s most recent data point exceeds its staleness threshold (6 h
 
 | Range | Label |
 |-------|-------|
-| 86\u2013100 | NORMALIZATION |
-| 66\u201385 | ELEVATED RISK |
-| 41\u201365 | HIGH TENSION |
-| 0\u201340 | CRITICAL ALERT |
+| 0\u201339 | LOW RISK |
+| 40\u201359 | ELEVATED RISK |
+| 60\u201374 | HIGH TENSION |
+| 75\u201384 | CRITICAL |
+| 85\u2013100 | EXTREME |
 
 ## Update Frequency
 

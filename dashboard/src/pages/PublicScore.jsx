@@ -129,12 +129,13 @@ export default function PublicScore() {
   const freshnessLabel = isToday ? '\u25cf LIVE' : isYesterday ? '\u25cf 1 DAY OLD' : '\u25cf STALE'
 
   // Score legend
-  const band = computedScore <= 30 ? 3 : computedScore <= 50 ? 2 : computedScore <= 70 ? 1 : 0
+  const band = computedScore >= 85 ? 4 : computedScore >= 75 ? 3 : computedScore >= 60 ? 2 : computedScore >= 40 ? 1 : 0
   const bands = [
-    { range: '71\u2013100', label: 'NOMINAL', desc: 'Conditions within normal parameters', color: '#48bb78' },
-    { range: '51\u201370', label: 'ELEVATED', desc: 'Above-baseline readings, monitoring active', color: '#c9a84c' },
-    { range: '31\u201350', label: 'HIGH TENSION', desc: 'Elevated signals across key layers', color: '#dd6b20' },
-    { range: '0\u201330', label: 'CRITICAL', desc: 'Multiple leading indicators in stress zone', color: '#e53e3e' },
+    { range: '0\u201339', label: 'LOW RISK', desc: 'Conditions within normal parameters', color: '#48bb78' },
+    { range: '40\u201359', label: 'ELEVATED RISK', desc: 'Above-baseline readings, monitoring active', color: '#c9a84c' },
+    { range: '60\u201374', label: 'HIGH TENSION', desc: 'Elevated signals across key layers', color: '#dd6b20' },
+    { range: '75\u201384', label: 'CRITICAL', desc: 'Multiple leading indicators in stress zone', color: '#e53e3e' },
+    { range: '85\u2013100', label: 'EXTREME', desc: 'Maximum risk \u2014 active conflict indicators', color: '#7f1d1d' },
   ]
 
   return (
