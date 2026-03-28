@@ -4,7 +4,7 @@ import { supabase } from '../supabaseClient'
 const SENTINEL_SIGNALS = ['vessel_count', 'vlcc_ag_east_rate', 'war_risk_premium', 'bandar_abbas_activity']
 
 function getStatus(row) {
-  const val = row.value
+  const val = row.raw_value
   const notes = (row.notes || '').toLowerCase()
 
   if (notes.includes('error') || notes.includes('failed')) return 'ERROR'
@@ -64,7 +64,7 @@ export default function ExtractionLog() {
     const [sigRes, hniRes] = await Promise.all([
       supabase
         .from('raw_signals')
-        .select('signal_name, value, source, created_at, notes')
+        .select('signal_name, raw_value, source_url, created_at, notes')
         .order('created_at', { ascending: false })
         .limit(500),
       supabase
@@ -161,7 +161,7 @@ export default function ExtractionLog() {
     if (!filteredRows.length) return
     const header = 'timestamp,signal,value,status,source,notes\n'
     const body = filteredRows.map(r =>
-      `"${r.created_at}","${r.signal_name}","${r.value ?? ''}","${getStatus(r)}","${(r.source || '').replace(/"/g, '""')}","${(r.notes || '').replace(/"/g, '""')}"`
+      `"${r.created_at}","${r.signal_name}","${r.raw_value ?? ''}","${getStatus(r)}","${(r.source_url || '').replace(/"/g, '""')}","${(r.notes || '').replace(/"/g, '""')}"`
     ).join('\n')
     const blob = new Blob([header + body], { type: 'text/csv' })
     const url = URL.createObjectURL(blob)
@@ -302,7 +302,7 @@ export default function ExtractionLog() {
                     </td>
                     <td className="text-white font-mono text-[10px] py-2 px-3">{row.signal_name}</td>
                     <td className="text-white font-mono text-[10px] py-2 px-3 text-right">
-                      {row.value != null ? String(row.value) : '—'}
+                      {row.raw_value != null ? String(row.raw_value) : '—'}
                     </td>
                     <td className="text-center py-2 px-3">
                       <span title={status === 'SENTINEL ZERO' ? 'Sentinel zero — extraction failed, not a real value' : ''}>
@@ -310,7 +310,7 @@ export default function ExtractionLog() {
                       </span>
                     </td>
                     <td className="text-gray-500 font-mono text-[10px] py-2 px-3 max-w-[200px] truncate">
-                      {row.source || '—'}
+                      {row.source_url || '—'}
                     </td>
                     <td className="text-gray-500 font-mono text-[10px] py-2 px-3 max-w-[150px] truncate">
                       {row.notes || '—'}
