@@ -1,0 +1,6 @@
+[deploy]
+startCommand = "python cron_test.py"
+
+[[crons]]
+schedule = "*/5 * * * *"
+command = "python cron_test.py"
