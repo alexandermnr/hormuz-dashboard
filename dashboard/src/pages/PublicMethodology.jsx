@@ -184,6 +184,10 @@ A Confirmed Event is a documented episode in which a significant RSBI score move
 ## Legal Disclaimer
 
 This product provides data intelligence for informational and audit support purposes only. It does not constitute financial, legal, or operational advice. The RSBI score and associated outputs are analytical outputs based on publicly available data and should not be the sole basis for any decision-making. Users assume all responsibility for how this information is applied.
+
+## AIS Data Limitation Disclosure
+
+*Vessel transit data for the Strait of Hormuz is currently unavailable due to widespread AIS signal disruption during active conflict conditions, consistent with field reporting confirming approximately 50% of Hormuz transits are dark during the present threat environment; vessel count is excluded from composite scoring until the AIS environment normalizes.*
 `
 
 const indices = [
