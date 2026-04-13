@@ -12,10 +12,10 @@ const INDICES = [
   },
   {
     short: 'RED SEA',
-    full: 'Red Sea-Suez Corridor Index',
-    live: false,
+    full: 'Red Sea Burden Index',
+    live: true,
     path: '/red-sea',
-    launch: 'Q3 2026',
+    launch: null,
   },
   {
     short: 'SEMICONDUCTORS',
@@ -193,17 +193,25 @@ function IndexCard({ index, hniScore }) {
 
 export default function GritTerminalLanding() {
   const [hniScore, setHniScore] = useState(null)
+  const [rsbiScore, setRsbiScore] = useState(null)
 
   useEffect(() => {
-    async function fetchScore() {
-      const { data } = await supabase
+    async function fetchScores() {
+      const { data: hniData } = await supabase
         .from('hni_scores')
         .select('composite_hni')
         .order('score_date', { ascending: false })
         .limit(1)
-      if (data?.[0]) setHniScore(data[0].composite_hni)
+      if (hniData?.[0]) setHniScore(hniData[0].composite_hni)
+
+      const { data: rsbiData } = await supabase
+        .from('rsbi_scores')
+        .select('composite_score, status_label, velocity_24h, score_date')
+        .order('score_date', { ascending: false })
+        .limit(1)
+      if (rsbiData?.[0]) setRsbiScore(rsbiData[0].composite_score)
     }
-    fetchScore()
+    fetchScores()
   }, [])
 
   return (
@@ -225,7 +233,7 @@ export default function GritTerminalLanding() {
       <section className="max-w-6xl mx-auto px-6 pb-20 w-full">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {INDICES.map((idx) => (
-            <IndexCard key={idx.short} index={idx} hniScore={idx.live ? hniScore : null} />
+            <IndexCard key={idx.short} index={idx} hniScore={idx.short === 'HORMUZ' ? hniScore : idx.short === 'RED SEA' ? rsbiScore : null} />
           ))}
         </div>
       </section>
