@@ -18,6 +18,7 @@ import EventLog from './pages/EventLog'
 import Accuracy from './pages/Accuracy'
 import GritTerminalLanding from './pages/GritTerminalLanding'
 import HormuzLanding from './pages/HormuzLanding'
+import RedSeaLanding from './pages/RedSeaLanding'
 import ComingSoon from './pages/ComingSoon'
 import ExtractionLog from './pages/ExtractionLog'
 
@@ -172,14 +173,7 @@ export default function App() {
       {/* ========================================= */}
       <Route path="/" element={<GritTerminalLanding />} />
       <Route path="/hormuz" element={<HormuzLanding />} />
-      <Route path="/red-sea" element={
-        <ComingSoon
-          indexName="RED SEA"
-          fullName="Red Sea-Suez Corridor Index"
-          description="Composite disruption index tracking Houthi activity, Suez transit volumes, container rerouting costs, and Red Sea war risk premiums."
-          launchDate="Q3 2026"
-        />
-      } />
+      <Route path="/red-sea" element={<RedSeaLanding />} />
       <Route path="/semiconductors" element={
         <ComingSoon
           indexName="SEMICONDUCTORS"
